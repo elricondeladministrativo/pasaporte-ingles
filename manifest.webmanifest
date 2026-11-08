@@ -1,0 +1,16 @@
+{
+  "name": "Pasaporte de Inglés",
+  "short_name": "Pasaporte",
+  "description": "Juego para practicar English File Beginner",
+  "lang": "es-AR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e1623",
+  "theme_color": "#14233a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
