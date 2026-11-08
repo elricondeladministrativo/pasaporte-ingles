@@ -1,6 +1,6 @@
 // Guarda el juego en el teléfono para que funcione sin internet.
 // Cambiá VERSION cuando subas una versión nueva del juego.
-const VERSION = "pasaporte-v1";
+const VERSION = "pasaporte-v2";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
