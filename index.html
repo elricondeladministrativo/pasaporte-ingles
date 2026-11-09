@@ -85,6 +85,29 @@ h1,h2,h3{font-family:var(--display); text-wrap:balance; margin:0}
 .extra b{font-family:var(--display); font-size:20px}
 .extra span{opacity:.75; font-size:14px}
 .foot{margin-top:22px; color:var(--muted); font-size:13px}
+.pips{margin-top:auto; display:flex; gap:5px; align-items:center}
+.pip{width:24px; height:24px; display:grid; place-items:center; border-radius:999px; font-family:var(--mono); font-weight:700; font-size:11px; border:1.5px dashed var(--line); color:var(--line)}
+.pip.open{border:1.5px solid var(--muted); color:var(--muted)}
+.pip.done{border:1.5px solid var(--c); background:var(--c); color:var(--page)}
+.pstars{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* ---------- Niveles ---------- */
+.lvhead{margin-top:18px; padding-bottom:14px; border-bottom:2px solid var(--ink)}
+.lvhead h2{font-size:clamp(26px, 5.5vw, 36px); font-weight:800; line-height:1.05}
+.lvhead p{margin:6px 0 0; color:var(--muted)}
+.levels{display:grid; gap:12px; margin-top:18px}
+.lv{display:grid; gap:8px; text-align:left; background:var(--page); border:2px solid var(--line); border-left:8px solid var(--c); border-radius:10px; padding:16px 18px}
+.lv:hover:not(:disabled){border-color:var(--c)}
+.lv:disabled{opacity:.55; cursor:not-allowed; border-left-color:var(--line)}
+.lv-top{display:flex; align-items:center; gap:14px}
+.lv-top b{display:block; font-family:var(--display); font-size:22px; line-height:1.1}
+.lv-top small{color:var(--muted); font-size:13px}
+.lv-top .stars{margin-left:auto; font-size:18px; letter-spacing:2px; color:var(--line)}
+.lv-top .stars i{font-style:normal} .lv-top .stars i.on{color:var(--c)}
+.lv-num{width:38px; height:38px; flex:none; display:grid; place-items:center; border-radius:999px; border:2px solid var(--c); color:var(--c); font-family:var(--mono); font-weight:700}
+.lv-desc{color:var(--ink)}
+.ref{display:flex; align-items:center; gap:6px; margin-top:8px!important; font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.02em}
+.ref svg{width:15px; height:15px; flex:none}
 
 /* ---------- Play ---------- */
 .bar{display:flex; align-items:center; gap:12px}
@@ -156,287 +179,48 @@ h1,h2,h3{font-family:var(--display); text-wrap:balance; margin:0}
 
 <div id="app"></div>
 
+<script src="preguntas.js"></script>
 <script>
-/* ===================== Banco de preguntas (English File Beginner, 5th ed.) ===================== */
-const M=(q,a,o,e)=>({t:"m",q,a,o,e});            // opción múltiple
-const L=(a,o,e,say)=>({t:"l",a,o,e,say});         // escuchar y elegir
-const O=(a,q,e)=>({t:"o",a,q,e});                 // ordenar la oración (q = traducción)
-const W=(q,a,e)=>({t:"w",q,a:[].concat(a),e});    // escribir
-
-const UNITS=[
-{n:1,t:"Nice to meet you · Music round the world",g:"be: I, you, he, she, it · números 0–10 · días · países",q:[
- M("I ___ Lucía. Nice to meet you.","am",["is","are","be"],"Con I siempre va am: I am = I'm."),
- M("___ you from Spain?","Are",["Is","Am","Be"],"Con you va are: Are you…?"),
- M("Where ___ she from?","is",["are","am","does"],"Con he / she / it va is."),
- M("He's from Brazil. He ___ from Portugal.","isn't",["aren't","not","am not"],"Negativo de is: is not = isn't."),
- M("It ___ a nice city.","is",["are","am","be"],"It is = It's."),
- L("seven",["eleven","six","nine"]),
- L("Thursday",["Tuesday","Saturday","Sunday"],"Thursday /θ/ y Tuesday /tj/: la primera letra suena distinto."),
- M("Monday, Tuesday, Wednesday, ___","Thursday",["Friday","Tuesday","Sunday"],"Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday."),
- M("¿Cómo decís «Encantado/a de conocerte»?","Nice to meet you.",["Nice to see you tomorrow.","Meet you nice.","How are you meet?"]),
- M("Te vas y lo/la ves mañana. ¿Qué decís?","See you tomorrow.",["Nice to meet you.","Hello.","Just a minute."]),
- O("Where are you from?","¿De dónde sos?"),
- O("I think it's in Italy.","Creo que está en Italia."),
- M("¿Cómo se dice «Alemania»?","Germany",["Germania","Deutschland","Holland"]),
- M("¿Cómo se dice «Estados Unidos»?","the United States",["the America States","the Unity States","the States United"]),
- W("Completá: «___ are you from?» (dónde)","where"),
- M("— What's your surname? — Gómez. — ___","How do you spell it?",["How do you say it?","What do you spell?","How spell you it?"]),
- M("En clase, la profe dice «Open your books». ¿Qué hacés?","Abro el libro.",["Cierro el libro.","Leo en voz alta.","Me siento."])
-]},
-{n:2,t:"Are you on holiday? · What number is the bus?",g:"be: we, you, they · nacionalidades · preguntas Wh- · números 11–100",q:[
- M("We ___ on holiday in Rome.","are",["is","am","be"]),
- M("___ they free? — Yes, they are.","Are",["Is","Do","Am"]),
- M("They ___ on business. They're on holiday.","aren't",["isn't","not","don't"],"Negativo de are: are not = aren't."),
- M("She's from Mexico. She's ___.","Mexican",["Mexicish","Mexicanese","Mexicoan"]),
- M("He's from China. He's ___.","Chinese",["Chinian","Chinish","Chinan"]),
- M("They're from Brazil. They're ___.","Brazilian",["Brazilish","Brazilese","Brazils"]),
- W("Nacionalidad: She's from Argentina. She's ___.",["argentinian","argentine","argentinean"],"Las nacionalidades van con mayúscula: Argentinian."),
- M("___ old is he?","How",["What","Who","Where"]),
- M("___ is your phone number?","What",["How","Who","Where"]),
- M("___ is he? — He's my brother.","Who",["What","How","Where"],"Who = quién."),
- L("thirteen",["thirty","three","thirty-three"],"-teen se acentúa al final (thir-TEEN); -ty al principio (THIR-ty)."),
- L("fifty",["fifteen","five","fifty-five"],"-ty se acentúa al principio: FIF-ty."),
- L("98",["19","89","99"],null,"ninety-eight"),
- L("079431",["079413","097431","079341"],"En los teléfonos el 0 se dice «oh».","oh, seven, nine, four, three, one"),
- O("What class are you in?","¿En qué clase estás?"),
- O("Are you on holiday?","¿Estás de vacaciones?"),
- M("How are you?","I'm fine, thanks.",["I'm twenty.","I'm from Spain.","I'm on holiday."]),
- M("How old are you?","I'm twenty-one.",["I'm twenty-one years.","I have twenty-one.","I have twenty-one years."],"La edad va con be: I'm 21 (nunca «I have»).")
-]},
-{n:3,t:"Where's my phone? · Souvenirs",g:"singular y plural · a / an · this, that, these, those · precios",q:[
- M("It's ___ umbrella.","an",["a","two","the a"],"an antes de sonido vocal: an umbrella, an ID card."),
- M("It's ___ ID card.","an",["a","two","the a"],"ID se pronuncia /aɪ diː/: empieza con sonido vocal, por eso an."),
- M("What are they? — They're ___.","keys",["key","a keys","an keys"]),
- W("Plural: one watch → two ___","watches","Terminadas en -ch, -sh, -s, -x agregan -es."),
- W("Plural: one dictionary → two ___","dictionaries","Consonante + y → -ies."),
- W("Plural: one box → two ___","boxes"),
- M("Where ___ my glasses?","are",["is","am","be"],"glasses (anteojos) es plural en inglés."),
- M("What are they?","They're keys.",["It's keys.","They keys.","Are they keys."]),
- M("What's in your bag?","I have two bank cards.",["I have two bank card.","I have a two bank cards.","I two bank cards have."]),
- M("Una cosa, lejos de vos: «___ is my phone.»","That",["This","These","Those"],"this / these = cerca; that / those = lejos."),
- M("Varias cosas, cerca de vos: «___ are my keys.»","These",["This","That","Those"]),
- M("Varias cosas, lejos: «How much are ___ T-shirts?»","those",["that","this","these"]),
- M("How much ___ these key rings?","are",["is","am","does"]),
- L("£25",["£52","£20.50","£35"],null,"They're twenty-five pounds."),
- M("— Can I help you? — ___","An orange juice, please.",["Yes, I can.","It's an orange.","How much, please."]),
- O("How much is this mug?","¿Cuánto cuesta esta taza?"),
- O("Is this your phone?","¿Este es tu teléfono?")
-]},
-{n:4,t:"This is my family · The right car for me",g:"posesivos · 's · familia · adjetivos y colores",q:[
- M("This is Ana. That's ___ brother.","her",["his","she","hers"],"her = de ella; his = de él."),
- M("Mr and Mrs Lee are here. Those are ___ children.","their",["they","there","them"]),
- M("Hi! What's ___ name?","your",["you","you're","yours"]),
- M("We love this car. It's ___ car.","our",["we","us","ours"]),
- M("¿Cómo se dice «Es el auto de Ana»?","It's Ana's car.",["It's car Ana.","It's the car of Ana's.","It's Anas car."],"Persona + 's + cosa: Ana's car."),
- M("Your mother and father are your ___.","parents",["fathers","grandparents","children"],"parents = padres (mamá y papá). fathers = varios papás."),
- M("The father of your mother is your ___.","grandfather",["uncle","grandson","brother"]),
- M("The daughter of your brother is your ___.","niece",["nephew","aunt","cousin"]),
- M("The sister of your mother is your ___.","aunt",["uncle","niece","grandmother"]),
- M("It's a ___.","red car",["car red","reds car","car is red"],"El adjetivo va antes del sustantivo."),
- M("They're ___ cars.","big",["bigs","the big","bigges"],"Los adjetivos no tienen plural en inglés."),
- M("Lo contrario de «cheap» es…","expensive",["slow","old","small"]),
- M("Lo contrario de «fast» es…","slow",["easy","new","short"]),
- W("«amarillo» en inglés","yellow"),
- W("«marrón» en inglés","brown"),
- O("Is the car for you?","¿El auto es para vos?"),
- O("I prefer that red car.","Prefiero ese auto rojo.")
-]},
-{n:5,t:"My favourite meal · A very long flight",g:"present simple: I, you, we, they · comida y bebida · la hora",q:[
- M("I ___ like fish. I'm a vegetarian.","don't",["doesn't","not","am not"]),
- M("We ___ coffee every morning.","drink",["drinks","drinking","are drink"]),
- M("___ you like pasta?","Do",["Are","Does","Is"]),
- M("— Do you have a car? — Yes, I ___.","do",["have","am","does"],"Respuesta corta con el auxiliar: Yes, I do. / No, I don't."),
- M("They don't ___ meat.","eat",["eats","eating","to eat"]),
- W("Pasá a negativo: «I eat breakfast.»",["i don't eat breakfast","i do not eat breakfast"]),
- M("«pescado» en inglés","fish",["chicken","meat","rice"]),
- M("Green ___ is a popular drink in Japan.","tea",["toast","soup","rice"]),
- M("___ TV","watch",["look","see","make"]),
- M("___ English and Spanish","speak",["talk","say","tell"]),
- M("___ in a flat","live",["stay","is","life"]),
- O("Do you want fish or pasta?","¿Querés pescado o pasta?"),
- O("What time do we arrive?","¿A qué hora llegamos?"),
- L("8:45",["9:45","8:15","9:15"],"quarter to nine = faltan 15 para las 9.","It's quarter to nine."),
- L("3:30",["3:13","1:30","3:03"],"half past three = las 3 y media.","It's half past three."),
- M("I'm ___. I want a sandwich.","hungry",["tired","cold","thirsty"]),
- M("I'm ___. I want to go to bed.","tired",["hungry","hot","thirsty"])
-]},
-{n:6,t:"Old friends? · Good morning, goodnight",g:"present simple: he, she, it · trabajos · adverbios de frecuencia",q:[
- M("She ___ in a hospital.","works",["work","working","is work"],"Con he / she / it el verbo lleva -s."),
- M("He ___ wear glasses.","doesn't",["don't","isn't","not"]),
- M("___ she work in a hotel?","Does",["Do","Is","Are"]),
- M("What does she do?","She's a journalist.",["She is journalist.","She does journalist.","She works journalist."],"Con profesiones va a / an: She's a journalist."),
- W("watch → he ___","watches"),
- W("study → she ___","studies"),
- W("have → he ___","has","have es irregular: he has."),
- W("go → it ___","goes"),
- M("Works in a restaurant and brings food to the table.","a waiter",["a doctor","a pilot","a builder"]),
- M("Teaches students at a school.","a teacher",["a nurse","a lawyer","a receptionist"]),
- M("Drives people to the airport in a car.","a taxi driver",["a tour guide","a barman","a scientist"]),
- M("¿Cuál está bien?","I always get up early.",["I get up always early.","Always I get up early.","I get always up early."],"El adverbio de frecuencia va antes del verbo… pero después de be: He's never late."),
- M("He's ___ late. (nunca)","never",["always","usually","sometimes"]),
- M("— Does he like coffee? — No, he ___.","doesn't",["don't","isn't","not"]),
- O("What time do you get up?","¿A qué hora te levantás?"),
- O("Where does he work?","¿Dónde trabaja él?"),
- L("She gets up at half past nine.",["She gets up at half past five.","He gets up at half past nine.","She gets up at nine."])
-]},
-{n:7,t:"At the weekend · Lights, camera, action!",g:"orden en preguntas · imperativos · me, him, her… · películas · fechas",q:[
- M("___ you a football fan?","Are",["Do","Is","Does"]),
- M("What ___ you do at the weekend?","do",["are","does","is"]),
- O("What do you do at the weekend?","¿Qué hacés el fin de semana?"),
- O("Is your brother a football fan?","¿Tu hermano es fanático del fútbol?"),
- M("¿Cómo se dice «¡No te muevas!»?","Don't move!",["No move!","Not move!","Don't moving!"]),
- M("¿Cómo se dice «¡Hacé silencio!»?","Be quiet!",["Is quiet!","You quiet!","Are quiet!"]),
- M("I love Tom. I love ___.","him",["he","his","he's"],"Después del verbo: me, you, him, her, it, us, them."),
- M("Where's Anna? Call ___!","her",["she","hers","his"]),
- M("Can you help ___? (a nosotros)","us",["we","our","ours"]),
- M("This film is boring. I don't like ___.","it",["him","them","its"]),
- M("A film with spaceships, robots and the future.","science fiction",["a comedy","a western","a musical"]),
- M("A film that makes you laugh.","a comedy",["a horror film","a war film","a drama"]),
- W("Ordinal: 3 → the ___",["third","3rd"]),
- W("Ordinal: 12 → the ___",["twelfth","12th"]),
- M("May, June, ___","July",["August","April","January"]),
- L("21st March",["23rd March","21st May","1st March"],"Las fechas se dicen con ordinales: the twenty-first of March.","the twenty-first of March"),
- M("— Hello, can I speak to Mark, please? — ___","Just a minute.",["I'm Mark speaking you.","Yes, you speak.","Wait me."])
-]},
-{n:8,t:"Can I park here? · I ♥ shopping",g:"can / can't · like, love, hate + -ing · actividades",q:[
- M("— Can you swim? — Yes, I ___.","can",["do","am","swim"]),
- M("She ___ drive. She doesn't have a driving licence.","can't",["doesn't","isn't","don't can"]),
- M("He can ___ the guitar.","play",["plays","playing","to play"],"Después de can el verbo va en forma base."),
- M("— Can I park here? — ___","No, you can't. Sorry.",["No, you don't.","No, you aren't.","No, can't you."]),
- O("Can I park here?","¿Puedo estacionar acá?"),
- O("I can't speak French.","No sé hablar francés."),
- M("I love ___ in the sea.","swimming",["swim","swiming","swims"],"love / like / hate + verbo con -ing."),
- M("She hates ___ up early.","getting",["get","geting","gets"]),
- W("-ing: run → ___","running","Vocal corta + consonante: se duplica (running)."),
- W("-ing: dance → ___","dancing","Termina en -e: se saca la e (dancing)."),
- M("___ yoga","do",["play","make","go"]),
- M("___ photos","take",["do","make","play"]),
- M("___ a bike","ride",["drive","go","play"]),
- M("«frightened» significa…","asustado/a",["aburrido/a","cansado/a","enojado/a"]),
- M("I took my driving test and I ___. I can drive now!","passed",["failed","lost","missed"]),
- L("I can't come.",["I can come.","I can't go.","I come."],"can't suena /kɑːnt/ con vocal larga; can suena corto /kən/.")
-]},
-{n:9,t:"What are they really doing? · Watching and waiting",g:"present continuous · ¿continuous o simple? · ropa · invitar",q:[
- M("Look! It ___.","is raining",["rains","rain","raining"],"Algo que pasa ahora: be + verbo-ing."),
- M("What ___ you doing?","are",["do","is","does"]),
- M("She ___ a red jacket today.","is wearing",["wears","wear","wearing"]),
- M("I usually ___ to work by bus.","go",["am going","going","goes"],"Rutina (usually, every day) → present simple."),
- M("Listen! The baby ___.","is crying",["cries","cry","crying"]),
- M("He ___ in a bank. He's a cashier.","works",["is working","work","working"],"Algo permanente o habitual → present simple."),
- O("What are they doing?","¿Qué están haciendo?"),
- O("Are you working today?","¿Estás trabajando hoy?"),
- W("-ing: sit → ___","sitting"),
- M("«pantalones» en inglés","trousers",["shorts","shirts","socks"]),
- M("«pollera / falda» en inglés","a skirt",["a scarf","a shirt","a sweater"]),
- M("«zapatillas» (para correr) en inglés","trainers",["sandals","boots","shoes"]),
- M("I ___ the bus! Now I'm late.","missed",["lost","passed","took"],"miss the bus = perder el colectivo."),
- M("— Would you like to come? — ___","Yes, I'd love to.",["Yes, I like.","Yes, I would like come.","Yes, I'd love."]),
- M("— Would you like a coffee? — ___","Yes, please.",["Yes, I like.","Yes, I do.","Yes, I'd love."]),
- L("What are you doing?",["What do you do?","Where are you going?","What are you eating?"])
-]},
-{n:10,t:"A room with a view · Where was he?",g:"there is / there are · in, on, under · was / were · in, on, at",q:[
- M("There ___ a TV in the room.","is",["are","be","it's"]),
- M("There ___ two beds.","are",["is","be","have"]),
- M("___ there a minibar?","Is",["Are","Has","Does"]),
- M("There aren't ___ towels.","any",["some","a","an"],"Negativas y preguntas → any; afirmativas → some."),
- M("There are ___ chairs on the balcony.","some",["any","a","an"]),
- M("The cat is ___ the bed. (debajo)","under",["on","in","at"]),
- M("The keys are ___ the table. (sobre)","on",["in","under","at"]),
- M("I ___ at home yesterday.","was",["were","am","is"]),
- M("They ___ at the cinema last night.","were",["was","are","been"]),
- M("Where ___ you yesterday afternoon?","were",["was","are","did"]),
- M("— ___ he at work? — No, he wasn't.","Was",["Were","Is","Did"]),
- M("I was born ___ 1998.","in",["on","at","to"],"in + años, meses, estaciones."),
- M("See you ___ Monday!","on",["in","at","the"],"on + días y fechas."),
- M("The film starts ___ 7 o'clock.","at",["in","on","to"],"at + horas."),
- M("We go out ___ the weekend.","at",["in","on","to"],"En inglés británico: at the weekend."),
- O("Where were you last night?","¿Dónde estuviste anoche?"),
- O("Is there a lift in the hotel?","¿Hay ascensor en el hotel?"),
- M("«an island» significa…","una isla",["un lago","una costa","un castillo"])
-]},
-{n:11,t:"A new life in the USA · How was your day?",g:"past simple: regulares · get, go, have, do · direcciones",q:[
- W("Pasado: work →","worked"),
- W("Pasado: study →","studied","Consonante + y → -ied."),
- W("Pasado: stop →","stopped"),
- W("Pasado: travel →",["travelled","traveled"],"En inglés británico se duplica la l: travelled."),
- M("I ___ TV last night.","watched",["watch","watching","did watch"]),
- M("She didn't ___ the film.","like",["liked","likes","liking"],"Después de didn't el verbo va en forma base."),
- M("___ you visit Paris last year?","Did",["Do","Were","Was"]),
- M("Yesterday I ___ to the cinema.","went",["go","goed","did go"]),
- M("We ___ a party on Saturday.","had",["have","haved","has"]),
- M("He ___ home at 7 o'clock.","got",["get","getted","gets"]),
- M("— Did you go out last night? — No, I ___.","didn't",["don't","wasn't","not"]),
- O("How was your day?","¿Cómo te fue hoy?"),
- O("I didn't go to work yesterday.","Ayer no fui a trabajar."),
- M("«Go straight on and turn left.»","Seguí derecho y doblá a la izquierda.",["Doblá a la derecha y seguí derecho.","Volvé y doblá a la izquierda.","Seguí derecho; está a la derecha."]),
- M("— Is there a bank near here? — Yes, it's ___ the supermarket. (al lado de)","next to",["opposite","between","on"]),
- M("¿En cuál -ed suena como una sílaba más /ɪd/?","decided",["played","worked","lived"],"-ed suena /ɪd/ solo después de t o d: decid-ed, want-ed."),
- L("wanted",["want","went","wants"])
-]},
-{n:12,t:"Strangers on a train · Revise the past",g:"past simple: regulares e irregulares · did / didn't · was / were · repaso",q:[
- W("Pasado: buy →","bought"),
- W("Pasado: leave →","left"),
- W("Pasado: say →","said"),
- W("Pasado: send →","sent"),
- W("Pasado: sit →","sat"),
- W("Pasado: tell →","told"),
- W("Pasado: write →","wrote"),
- M("Verbs Quiz: ¿cuál de estos verbos duplica la consonante final en pasado?","stop",["open","wait","talk"],"stop → stopped (vocal corta + consonante)."),
- M("Verbs Quiz: ¿cuál de estos verbos solo agrega -d en pasado?","arrive",["ask","finish","talk"],"Termina en -e: arrive → arrived (igual que move, phone, exchange)."),
- M("Verbs Quiz: ¿en cuál -ed suena como una sílaba más /ɪd/?","started",["opened","looked","asked"],"-ed suena /ɪd/ solo después de t o d: started, waited."),
- M("¿Cuál tiene un sonido vocálico distinto? bought · saw · talked · worked","worked",["bought","saw","talked"],"bought, saw y talked suenan /ɔː/ como horse; worked suena /ɜː/."),
- M("¿Cuál tiene un sonido vocálico distinto? painted · rained · said · waited","said",["painted","rained","waited"],"said se pronuncia /sed/, con /e/ como egg."),
- M("¿Qué pasado suena con /e/, como egg?","left",["saw","told","bought"],"left, sent y said suenan /e/."),
- M("Strangers on a train: ¿dónde vio David a la mujer por primera vez?","On the platform.",["On the train.","In the café.","At the concert."],"«I saw a woman on the platform.»"),
- M("Strangers on a train: ¿de qué hablaron en el tren?","Classical music.",["Their jobs.","London.","Tennis."],"«We talked about music until the train arrived at Paddington Station.»"),
- M("Strangers on a train: ¿por qué David le dio su dirección a Olivia?","She offered to drive him home.",["She wanted to send him a letter.","He wanted to visit her.","She wanted to buy his flat."],"«I can drive you home,» she said. «I live near Chelsea.»"),
- M("Where did you ___ on Saturday?","go",["went","goes","going"],"Después de did el verbo va en infinitivo."),
- M("— What did you buy? — I ___ a new jacket.","bought",["buy","buyed","did buy"]),
- M("— ___ it expensive? — No, it wasn't.","Was",["Did","Were","Is"],"Con adjetivos (expensive, tired) va was / were, no did."),
- M("— Did you like the film? — No, I ___ it very much.","didn't like",["didn't liked","don't like","wasn't like"],"Negativo: didn't + infinitivo."),
- M("— Did you like the film? — Yes, I ___.","did",["liked","was","do"],"Respuesta corta: Yes, I did. / No, I didn't."),
- M("I liked the jacket, but I ___ it.","didn't buy",["didn't bought","not bought","don't buy"]),
- M("What time ___?","did the concert finish",["finished the concert","the concert finished","did the concert finished"],"QuASI: palabra de pregunta + did + sujeto + infinitivo."),
- M("— What time ___ to bed last night? — At 10.30.","did you go",["did you went","you went","went you"]),
- M("— ___ at school this morning? — Yes, I was.","Were you",["Did you","Was you","Are you"]),
- M("Were you at work yesterday? I ___ you.","didn't see",["didn't saw","not saw","wasn't see"]),
- O("Where did he see her?","¿Dónde la vio?"),
- O("He saw her on the train.","La vio en el tren."),
- O("What time did they get up?","¿A qué hora se levantaron?"),
- O("I didn't buy new clothes last month.","El mes pasado no compré ropa nueva."),
- M("¿be, have o do? «___ hungry»","be",["have","do","get"],"En inglés el hambre y el cansancio van con be: be hungry, be tired."),
- M("¿be, have o do? «___ homework»","do",["have","be","make"],"do homework, do sport."),
- M("¿be, have o do? «___ lunch»","have",["do","be","take"],"have lunch, have a good day."),
- M("Max was tired so he ___ to bed early last night.","went",["got","had","did"]),
- M("Sorry I'm late. I ___ the bus this morning.","got",["went","had","did"],"get the bus = tomar el colectivo."),
- M("John and Dina ___ married in the summer.","got",["went","had","did"],"get married = casarse."),
- M("¿Cuál de estos verbos es irregular?","go",["book","pack","stay"],"go → went. Los otros agregan -ed: booked, packed, stayed."),
- M("— Did you have a good journey? — No, I didn't sit down for two hours. The train was ___.","full",["empty","free","late"]),
- M("— My grandparents went to China last year. — ___! Where did they go?","That's interesting",["Time to go","Nice to meet you","Have a good day"]),
- M("Did you ___ numbers with the girl you met at the party?","exchange",["change","send","tell"],"exchange numbers = intercambiar números."),
- M("Mmm, that's a ___. Is Dad cooking?","nice smell",["nice seat","nice message","nice platform"]),
- M("«a platform» (en la estación) es…","un andén",["un asiento","un boleto","un vagón"]),
- M("«a seat» significa…","un asiento",["un andén","una entrada","un vagón"]),
- M("«turn on a light» significa…","prender una luz",["apagar una luz","mirar una luz","cambiar una luz"]),
- L("He saw her on the train.",["He sat with her on the train.","He saw her on the platform.","He sees her on the train."]),
- L("We bought two coffees.",["We brought two coffees.","We bought two cookies.","We buy two coffees."]),
- L("What did you do last Saturday?",["What do you do on Saturday?","What did you do last Sunday?","Where did you go last Saturday?"]),
- M("«Ayer compré un regalo.»","Yesterday I bought a present.",["Yesterday I buyed a present.","Yesterday I did buy a present.","Yesterday I brought a present."],"buy → bought (comprar); bring → brought (traer).")
-]}
-];
-
-/* Verbos de la página «Regular and irregular verbs» */
-const REG="answer answered|arrive arrived|ask asked|book booked|carry carried|change changed|clean cleaned|close closed|cook cooked|cry cried|decide decided|finish finished|hate hated|help helped|invite invited|learn learned|like liked|listen listened|live lived|look looked|love loved|miss missed|move moved|need needed|offer offered|open opened|pack packed|paint painted|park parked|pass passed|phone phoned|play played|rain rained|relax relaxed|rent rented|snow snowed|start started|stay stayed|stop stopped|study studied|talk talked|travel travelled|turn turned|use used|wait waited|walk walked|want wanted|wash washed|watch watched|work worked".split("|").map(s=>s.split(" "));
-const IRR=[["be (I / he)","was"],["be (you / we / they)","were"],["buy","bought"],["do","did"],["get","got"],["go","went"],["have","had"],["leave","left"],["say","said"],["see","saw"],["send","sent"],["sit","sat"],["tell","told"],["write","wrote"]];
-const ALT={learned:["learnt"],travelled:["traveled"]};
-
 /* ===================== Estado y utilidades ===================== */
 const COLORS=["var(--u1)","var(--u2)","var(--u3)","var(--u4)"];
 const colorOf=n=>COLORS[(n-1)%4];
 const KEY="pasaporte-ingles-v1";
-let save={stars:{},muted:false,voice:"",rate:0.9};
+let save={lv:{},seen:{},miss:{},muted:false,voice:"",rate:0.9};
 try{ const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s) save=Object.assign(save,s);}catch(e){}
+if(save.stars){ Object.keys(save.stars).forEach(n=>{ if(!save.lv[n]) save.lv[n]=[save.stars[n]||0,0,0]; }); delete save.stars; }
 function persist(){ try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){} }
+
+/* Niveles: se abre el siguiente con 7 de 10 (2 estrellas) */
+const LEVELS=[
+  {k:"f",name:"Fácil",tag:"Turista",ink:"TOURIST",desc:"Elegís entre 3 opciones."},
+  {k:"m",name:"Medio",tag:"Residente",ink:"RESIDENT",desc:"4 opciones, escuchar y armar oraciones."},
+  {k:"d",name:"Difícil",tag:"Ciudadano",ink:"CITIZEN",desc:"Escribís vos las respuestas."}
+];
+const ROUND=10;
+function lvStars(n){ if(!Array.isArray(save.lv[n])) save.lv[n]=[0,0,0]; return save.lv[n]; }
+function unlocked(n,i){ return i===0||lvStars(n)[i-1]>=2; }
+function qid(q){ const s=q.t+"|"+(q.q||"")+"|"+[].concat(q.a).join("/"); let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
+function pickLevel(u,i){
+  const k=LEVELS[i].k, key=u.n+k;
+  const pool=u[k].filter(usable);
+  const seen=new Set(save.seen[key]||[]), miss=new Set(save.miss[key]||[]);
+  const gen=GEN[u.n]?GEN[u.n][k]().filter(usable).map(q=>Object.assign(q,{p:GEN[u.n].ref,gen:true})):[];
+  const need=Math.max(0,ROUND-gen.length);
+  const missed=shuffle(pool.filter(q=>miss.has(qid(q)))).slice(0,3);      // primero, las que fallaste antes
+  const rest=pool.filter(q=>!missed.includes(q));
+  let fresh=shuffle(rest.filter(q=>!seen.has(qid(q))));                     // después, las que no viste
+  if(missed.length+fresh.length<need){                                      // ya viste todas: empieza otra vuelta
+    save.seen[key]=[]; fresh=fresh.concat(shuffle(rest.filter(q=>seen.has(qid(q)))));
+  }
+  return shuffle(missed.concat(fresh).slice(0,need).concat(gen)).slice(0,ROUND);
+}
+function track(q,ok){
+  if(!S||S.meta.kind!=="unit"||q.gen||q.retry) return;
+  const key=S.meta.unit.n+LEVELS[S.meta.lv].k, id=qid(q);
+  const seen=save.seen[key]||(save.seen[key]=[]); if(!seen.includes(id)) seen.push(id);
+  let miss=save.miss[key]||[]; miss=miss.filter(x=>x!==id); if(!ok) miss.push(id); save.miss[key]=miss;
+  persist();
+}
 
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -498,6 +282,7 @@ const ICON={
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
   spk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13"/></svg>',
   snail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="12" r="5"/><path d="M13 12a2 2 0 102-2M3 19h15a3 3 0 003-3M6 19V9M4 7l2 2 2-2"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 013 3v13a2 2 0 00-2-2H2zM22 4h-7a3 3 0 00-3 3v13a2 2 0 012-2h8z"/></svg>',
   mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M22 9l-6 6M16 9l6 6"/></svg>'
 };
 
@@ -505,16 +290,16 @@ const ICON={
 function starsHTML(n){ let s=""; for(let i=0;i<3;i++) s+=`<i class="${i<n?"on":""}">★</i>`; return s; }
 function home(){
   if(TTS) speechSynthesis.cancel();
-  const total=UNITS.reduce((t,u)=>t+(save.stars[u.n]||0),0);
-  const sealed=UNITS.filter(u=>(save.stars[u.n]||0)>0).length;
+  const total=UNITS.reduce((t,u)=>t+lvStars(u.n).reduce((a,b)=>a+b,0),0);
+  const passed=UNITS.reduce((t,u)=>t+lvStars(u.n).filter(x=>x>=2).length,0);
   app.innerHTML=`
   <header class="cover">
     <div>
       <div class="label">English File · Beginner · 5th edition</div>
       <h1>Pasaporte<br><span>de Inglés</span></h1>
-      <p>Cada File del libro es una visa. Respondé 10 preguntas y ganá el sello: 3 estrellas con 9 o 10 bien.</p>
+      <p>Cada File del libro es una visa con tres niveles: Fácil, Medio y Difícil. Con 7 de 10 bien se abre el siguiente. Las preguntas cambian cada vez que jugás.</p>
     </div>
-    <div class="tally"><div class="label">Sellos</div><b>${sealed}/12</b><div class="label">${total} de 36 ★</div></div>
+    <div class="tally"><div class="label">Niveles aprobados</div><b>${passed}/36</b><div class="label">${total} de 108 ★</div></div>
   </header>
   <div class="toolbar">
     <button class="chip" id="mute" aria-pressed="${save.muted}">${save.muted?ICON.mute.replace('<svg','<svg width="16" height="16"'):ICON.spk.replace('<svg','<svg width="16" height="16"')} Sonidos ${save.muted?"apagados":"activados"}</button>
@@ -528,21 +313,21 @@ function home(){
     <div class="vp-row"><button class="go" id="trytts">Probar voz</button><span class="vp-help">¿Pocas voces? En el celular se agregan desde la configuración del teléfono (texto a voz).</span></div>
   </section>`:""}
   <section class="grid" aria-label="Files">
-    ${UNITS.map(u=>{const s=save.stars[u.n]||0;return `
+    ${UNITS.map(u=>{const st=lvStars(u.n), top=st.reduce((a,x,i)=>x>=2?i:a,-1);return `
       <button class="visa" style="--c:${colorOf(u.n)}" data-u="${u.n}">
         <span class="num">FILE ${String(u.n).padStart(2,"0")}</span>
         <h3>${esc(u.t)}</h3>
         <small>${esc(u.g)}</small>
-        <span class="stars" aria-label="${s} de 3 estrellas">${starsHTML(s)}</span>
-        ${s>0?`<span class="ink">${s===3?"APPROVED":"ENTRY"}</span>`:""}
+        <span class="pips" aria-label="Niveles: ${LEVELS.map((l,i)=>l.name+" "+st[i]+" de 3 estrellas").join(", ")}">${LEVELS.map((l,i)=>`<span class="pip ${st[i]>=2?"done":unlocked(u.n,i)?"open":""}">${l.name[0]}</span>`).join("")}<span class="pstars">★ ${st.reduce((a,b)=>a+b,0)}/9</span></span>
+        ${top>=0?`<span class="ink">${LEVELS[top].ink}</span>`:""}
       </button>`;}).join("")}
   </section>
   <section class="extras">
-    <button class="extra" id="mix"><b>Vuelo mezclado</b><span>15 preguntas de todos los Files</span></button>
+    <button class="extra" id="mix"><b>Vuelo mezclado</b><span>15 preguntas de los Files, niveles Fácil y Medio</span></button>
     <button class="extra" id="verbs"><b>Aduana de verbos</b><span>15 verbos en pasado, de la lista del libro</span></button>
   </section>
   <p class="foot">El progreso se guarda en este navegador.</p>`;
-  app.querySelectorAll(".visa").forEach(b=>b.onclick=()=>{const u=UNITS[b.dataset.u-1];startUnit(u);});
+  app.querySelectorAll(".visa").forEach(b=>b.onclick=()=>levelScreen(UNITS[b.dataset.u-1]));
   app.querySelector("#mix").onclick=()=>start({kind:"mix",label:"Vuelo mezclado",color:"var(--stamp)"},pickMix());
   app.querySelector("#verbs").onclick=()=>start({kind:"verbs",label:"Aduana de verbos",color:"var(--stamp)"},pickVerbs());
   app.querySelector("#mute").onclick=()=>{save.muted=!save.muted;persist();home();};
@@ -558,8 +343,8 @@ function home(){
 }
 
 function usable(q){ return TTS||q.t!=="l"; }
-function startUnit(u){ start({kind:"unit",unit:u,label:"FILE "+String(u.n).padStart(2,"0"),color:colorOf(u.n)}, shuffle(u.q.filter(usable)).slice(0,10)); }
-function pickMix(){ return shuffle(UNITS.flatMap(u=>u.q.filter(usable).map(q=>Object.assign({from:u.n},q)))).slice(0,15); }
+function startLevel(u,i){ start({kind:"unit",unit:u,lv:i,label:"FILE "+String(u.n).padStart(2,"0")+" · "+LEVELS[i].name.toUpperCase(),color:colorOf(u.n)}, pickLevel(u,i)); }
+function pickMix(){ return shuffle(UNITS.flatMap(u=>u.f.concat(u.m).filter(usable).map(q=>Object.assign({from:u.n},q)))).slice(0,15); }
 function pickVerbs(){
   const irr=shuffle(IRR).slice(0,9).map(([b,p])=>W(`Pasado: ${b} →`,p,"Verbo irregular: hay que aprenderlo de memoria."));
   const reg=shuffle(REG).slice(0,6).map(([b,p])=>{
@@ -569,13 +354,40 @@ function pickVerbs(){
     else if(b.endsWith("e")) e="Termina en -e: solo se agrega -d.";
     return W(`Pasado: ${b} →`,[p].concat(ALT[p]||[]),e);
   });
-  return shuffle(irr.concat(reg));
+  return shuffle(irr.concat(reg)).map(q=>Object.assign(q,{p:P133}));
+}
+
+/* ===================== Pantalla: niveles de un File ===================== */
+function levelScreen(u){
+  if(TTS) speechSynthesis.cancel();
+  S=null;
+  const st=lvStars(u.n);
+  app.style.setProperty("--c", colorOf(u.n));
+  app.innerHTML=`
+    <div class="bar"><button class="icon-btn" id="back" aria-label="Volver al pasaporte">${ICON.back}</button><span class="label">FILE ${String(u.n).padStart(2,"0")}</span></div>
+    <header class="lvhead">
+      <h2>${esc(u.t)}</h2>
+      <p>${esc(u.g)}</p>
+      <p class="label">Material: Libro ${esc(u.pages)}</p>
+    </header>
+    <section class="levels">
+      ${LEVELS.map((l,i)=>{const open=unlocked(u.n,i), n=(GEN[u.n]?"Más de ":"")+u[l.k].length;return `
+      <button class="lv" data-i="${i}" ${open?"":"disabled"} aria-label="Nivel ${l.name}${open?"":", bloqueado"}">
+        <span class="lv-top"><span class="lv-num">${i+1}</span><span><b>${l.name}</b><small>${l.tag}</small></span><span class="stars">${starsHTML(st[i])}</span></span>
+        <span class="lv-desc">${open?l.desc:`Se abre con 7 de 10 en ${LEVELS[i-1].name}.`}</span>
+        <span class="label">${open?`${n} preguntas · cambian cada vez`:"Bloqueado"}</span>
+      </button>`;}).join("")}
+    </section>
+    <p class="foot">Cada partida tiene 10 preguntas. Primero vuelven las que fallaste, después las que todavía no viste.</p>`;
+  app.querySelector("#back").onclick=home;
+  app.querySelectorAll(".lv").forEach(b=>b.onclick=()=>startLevel(u,+b.dataset.i));
 }
 
 /* ===================== Pantalla: juego ===================== */
 let S=null;
 function start(meta,qs){
-  S={meta,queue:qs.map(q=>Object.assign({},q,{opts:q.o?shuffle([q.a].concat(q.o)):null})),i:0,ok:0,total:qs.length,streak:0,best:0,mistakes:[]};
+  const few=meta.kind==="unit"&&meta.lv===0;   // Fácil: 3 opciones
+  S={meta,queue:qs.map(q=>Object.assign({},q,{opts:q.o?shuffle([q.a].concat(few?shuffle(q.o).slice(0,2):q.o)):null})),i:0,ok:0,total:qs.length,streak:0,best:0,mistakes:[]};
   ask();
 }
 
@@ -625,7 +437,7 @@ function ask(){
       ${body}
       <div id="fb"></div>
     </article>`;
-  app.querySelector("#back").onclick=home;
+  app.querySelector("#back").onclick=()=>S.meta.kind==="unit"?levelScreen(S.meta.unit):home();
   if(q.t==="m"||q.t==="l"){
     app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(b.dataset.v,b));
     if(q.t==="l"){
@@ -654,14 +466,14 @@ function ask(){
 
 function isRight(q,v){
   if(q.t==="w") return q.a.some(a=>norm(a)===norm(v));
-  if(q.t==="o") return norm(v)===norm(q.a);
+  if(q.t==="o") return [q.a].concat(q.alt||[]).some(a=>norm(a)===norm(v));
   return v===q.a;
 }
 
 function answer(v,btn){
   const q=S.queue[S.i]; if(S.answered) return; S.answered=true;
   const ok=isRight(q,v);
-  beep(ok);
+  beep(ok); track(q,ok);
   if(!q.retry){ if(ok){S.ok++;} else {S.mistakes.push({q,v});} }
   if(ok){S.streak++; S.best=Math.max(S.best,S.streak);} else {S.streak=0; if(!q.retry) S.queue.push(Object.assign({},q,{retry:true,opts:q.opts?shuffle(q.opts):null}));}
   app.querySelectorAll(".opt").forEach(b=>{b.disabled=true; if(b.dataset.v===(q.t==="w"?q.a[0]:q.a)) b.classList.add("right");});
@@ -675,6 +487,7 @@ function answer(v,btn){
       <div class="txt"><strong>${ok?cheers[Math.random()*cheers.length|0]:"Casi…"}</strong>
         ${ok?"":`<p>Respuesta: <b>${esc(correct)}</b></p>`}
         ${q.e?`<p>${esc(q.e)}</p>`:""}
+        ${q.p?`<p class="ref">${ICON.book}<span>${esc(q.p)}</span></p>`:""}
         ${!ok&&!q.retry?`<p class="label" style="margin-top:6px">Vuelve al final para repasar</p>`:""}
       </div>
       <div class="btns">
@@ -698,32 +511,45 @@ document.addEventListener("keydown",e=>{
 function result(){
   const pct=S.ok/S.total;
   const stars=pct>=.9?3:pct>=.7?2:pct>=.5?1:0;
-  let note="";
-  if(S.meta.kind==="unit"){
-    const prev=save.stars[S.meta.unit.n]||0;
-    if(stars>prev){ save.stars[S.meta.unit.n]=stars; persist(); note=prev?"¡Nuevo récord para este File!":"¡Sello nuevo en tu pasaporte!"; }
+  let note="", nextLv=null;
+  const unit=S.meta.kind==="unit";
+  if(unit){
+    const st=lvStars(S.meta.unit.n), i=S.meta.lv, prev=st[i];
+    if(stars>prev){ st[i]=stars; persist(); }
+    if(i<2 && stars>=2 && prev<2) note=`¡Desbloqueaste el nivel ${LEVELS[i+1].name}!`;
+    else if(i===2 && stars>=2 && prev<2) note="¡File completo! Aprobaste los tres niveles.";
+    else if(stars>prev && prev>0) note="¡Nuevo récord en este nivel!";
+    if(i<2 && unlocked(S.meta.unit.n,i+1)) nextLv=i+1;
   }
-  const msgs=["Necesitás 5 bien para el sello. Repasá y probá de nuevo.","Entraste. Con 7 bien ganás la segunda estrella.","Muy bien. Con 9 bien, las tres estrellas.","Visa completa. Impecable."];
+  const msgs=unit?[
+    "Necesitás 7 de 10 para abrir el siguiente nivel. Repasá y probá de nuevo: las preguntas cambian.",
+    "Casi. Con 7 de 10 se abre el siguiente nivel.",
+    "Aprobado. Con 9 de 10 sacás las tres estrellas.",
+    "Impecable."
+  ]:["Repasá y probá de nuevo.","Bien. Seguí practicando.","Muy bien.","Impecable."];
+  const stamp=unit?(stars>=2?(LEVELS[S.meta.lv].ink+" APPROVED"):stars?"ALMOST":"NOT YET"):(stars?"ENTRY APPROVED":"NOT YET");
   app.style.setProperty("--c", S.meta.color);
   app.innerHTML=`
   <section class="result">
     <div class="label">${esc(S.meta.label)}${S.meta.unit?" · "+esc(S.meta.unit.t):""}</div>
-    <div class="bigstamp ${stars?"":"fail"}"><span class="w">${stars?"ENTRY APPROVED":"NOT YET"}</span><span class="s">${"★".repeat(stars)+"☆".repeat(3-stars)}</span><span class="w">${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).toUpperCase()}</span></div>
+    <div class="bigstamp ${stars?"":"fail"}"><span class="w">${stamp}</span><span class="s">${"★".repeat(stars)+"☆".repeat(3-stars)}</span><span class="w">${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).toUpperCase()}</span></div>
     <div class="score">${S.ok} / ${S.total}</div>
     <p>${msgs[stars]} ${note?`<b>${note}</b>`:""}</p>
     <p>Mejor racha: ${S.best}</p>
     ${S.mistakes.length?`<div class="review"><h3>Para repasar</h3><ul>${S.mistakes.map(m=>{
       const c=m.q.t==="w"?m.q.a[0]:m.q.a;
-      const prompt=m.q.t==="l"?"(escuchar)":m.q.t==="o"?m.q.q:m.q.q;
-      return `<li>${esc(prompt)}<br><span class="yours">${esc(m.v)}</span> → <span class="good">${esc(c)}</span></li>`;}).join("")}</ul></div>`:""}
+      const prompt=m.q.t==="l"?"(escuchar)":m.q.q;
+      return `<li>${esc(prompt)}<br><span class="yours">${esc(m.v)}</span> → <span class="good">${esc(c)}</span>${m.q.p?`<span class="ref">${ICON.book}<span>${esc(m.q.p)}</span></span>`:""}</li>`;}).join("")}</ul></div>`:""}
     <div class="row">
-      <button class="go" id="again">Jugar otra vez</button>
-      <button class="ghost" id="home">Volver al pasaporte</button>
+      ${nextLv!==null&&stars>=2?`<button class="go" id="nextlv">Nivel ${LEVELS[nextLv].name} →</button><button class="ghost" id="again">Repetir con otras preguntas</button>`
+        :`<button class="go" id="again">${unit?"Repetir con otras preguntas":"Jugar otra vez"}</button>`}
+      <button class="ghost" id="home">${unit?"Elegir nivel":"Volver al pasaporte"}</button>
     </div>
   </section>`;
-  app.querySelector("#home").onclick=home;
+  app.querySelector("#home").onclick=()=>unit?levelScreen(S.meta.unit):home();
+  const nl=app.querySelector("#nextlv"); if(nl) nl.onclick=()=>startLevel(S.meta.unit,nextLv);
   app.querySelector("#again").onclick=()=>{
-    if(S.meta.kind==="unit") startUnit(S.meta.unit);
+    if(unit) startLevel(S.meta.unit,S.meta.lv);
     else if(S.meta.kind==="mix") start(S.meta,pickMix());
     else start(S.meta,pickVerbs());
   };

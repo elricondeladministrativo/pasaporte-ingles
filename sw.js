@@ -1,7 +1,7 @@
 // Guarda el juego en el teléfono para que funcione sin internet.
 // Con internet, siempre busca primero la versión nueva del juego.
-const VERSION = "pasaporte-v4";
-const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
+const VERSION = "pasaporte-v5";
+const FILES = ["./", "./index.html", "./preguntas.js", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(
